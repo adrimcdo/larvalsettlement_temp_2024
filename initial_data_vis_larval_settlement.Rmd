@@ -1,0 +1,51 @@
+---
+title: "Initial Data Visualization"
+author: "Adriane McDonald"
+date: "2024-07-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(ggplot2)
+library(tidyverse)
+library(oce)
+library(lubridate)
+library(forecast)
+library(janitor)
+#install.packages("data.table")
+library(data.table)
+
+```
+
+
+
+```{r}
+data<-read_csv("~/Downloads/Invertebrate_Settlement_All_Years_20230508.csv") %>% 
+  clean_names()
+
+
+purp_urchin_data <- data %>% 
+  select("site", "date_retrieved", "date_deployed", "duration", "line", "position", "brush", "s_purpuratus", "m_franciscanus", "total_urchins") %>% 
+  filter(s_purpuratus > -1)
+
+#%>% 
+#  summarize(mean_settlement_pr_year = mean())
+```
+
+trying some stuff out :/
+purple sea urchin settlement data visualization at all sites over time
+
+```{r}
+ggplot(data = purp_urchin_data, aes(x = date_deployed,
+                               y = s_purpuratus,
+                               color = site))+
+  geom_line()+
+  labs(y = "Date Deployed",
+       x = "S. purpuratus Larval Settlement")+
+  facet_wrap(~site)
+```
